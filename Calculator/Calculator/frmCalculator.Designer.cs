@@ -59,6 +59,7 @@
             this.txtDisplay.ReadOnly = true;
             this.txtDisplay.Size = new System.Drawing.Size(292, 20);
             this.txtDisplay.TabIndex = 0;
+
             // 
             // btnZero
             // 

@@ -17,20 +17,34 @@ namespace Calculator
         private decimal right;
         private decimal result;
         private bool valid;
+        private bool equals;
+        private bool operation;
         private List<decimal> backQueue;
         private enum type{add, sub, mult, div};
         private type func;
         public frmCalculator()
         {
             backQueue = new List<decimal>();
+            left = 0m;
+            equals = false;
+            operation = false;
             InitializeComponent();
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            valid = decimal.TryParse(txtDisplay.Text, out left);
+            if (result != 0m)
+            {
+                left = result;
+            }
+            else
+            {
+                valid = decimal.TryParse(txtDisplay.Text, out left);
+            }
             txtDisplay.Text = "";
+            operation = true;
             func = type.add;
+            equals = false;
             if (!valid)
             {
                 txtDisplay.Text = "Error";
@@ -39,9 +53,18 @@ namespace Calculator
 
         private void btnSubtract_Click(object sender, EventArgs e)
         {
-            valid = decimal.TryParse(txtDisplay.Text, out left);
+            if (result != 0m)
+            {
+                left = result;
+            }
+            else
+            {
+                valid = decimal.TryParse(txtDisplay.Text, out left);
+            }
             txtDisplay.Text = "";
+            operation = true;
             func = type.sub;
+            equals = false;
             if (!valid)
             {
                 txtDisplay.Text = "Error";
@@ -50,9 +73,18 @@ namespace Calculator
 
         private void btnMultiply_Click(object sender, EventArgs e)
         {
-            valid = decimal.TryParse(txtDisplay.Text, out left);
+            if (result != 0m)
+            {
+                left = result;
+            }
+            else
+            {
+                valid = decimal.TryParse(txtDisplay.Text, out left);
+            }
             txtDisplay.Text = "";
+            operation = true;
             func = type.mult;
+            equals = false;
             if (!valid)
             {
                 txtDisplay.Text = "Error";
@@ -61,9 +93,18 @@ namespace Calculator
 
         private void btnDivide_Click(object sender, EventArgs e)
         {
-            valid = decimal.TryParse(txtDisplay.Text, out left);
+            if (result != 0m)
+            {
+                left = result;
+            }
+            else
+            {
+                valid = decimal.TryParse(txtDisplay.Text, out left);
+            }
             txtDisplay.Text = "";
+            operation = true;
             func = type.div;
+            equals = false;
             if (!valid)
             {
                 txtDisplay.Text = "Error";
@@ -72,6 +113,7 @@ namespace Calculator
         private void btnSquareRoot_Click(object sender, EventArgs e)
         {
             decimal number;
+            operation = true;
             if (decimal.TryParse(txtDisplay.Text, out number))
             {
                 result = Convert.ToDecimal(Math.Round(Math.Sqrt(Double.Parse(txtDisplay.Text)),13));
@@ -85,6 +127,7 @@ namespace Calculator
         private void btnExponent_Click(object sender, EventArgs e)
         {
             decimal number;
+            operation = true;
             if (decimal.TryParse(txtDisplay.Text, out number))
             {
                 result = Convert.ToDecimal(1 / (Double.Parse(txtDisplay.Text)));
@@ -101,28 +144,44 @@ namespace Calculator
             decimal number;
             if (decimal.TryParse(txtDisplay.Text, out number))
             {
-
-                right = Decimal.Parse(txtDisplay.Text);
-
+                functions oper = new functions();
+                if (!equals)
+                {
+                    right = Decimal.Parse(txtDisplay.Text);
+                }
+                equals = true;
                 switch (func)
                 {
                     case type.add:
-                        result = left + right;
+                        result = oper.add(left,right);
+                        endResult();
                         break;
                     case type.sub:
-                        result = left - right;
+                        result = oper.sub(left,right);
+                        endResult();
                         break;
                     case type.mult:
-                        result = left * right;
+                        result = oper.multiply(left,right);
+                        endResult();
                         break;
                     case type.div:
-                        result = left / right;
+                        try
+                        {
+                            result = oper.divide(left, right);
+                            endResult();
+                        }
+                        catch (DivideByZeroException except)
+                        {
+                            txtDisplay.Text = except.Message;
+                        }
                         break;
                     default:
                         break;
                 }
+
+                
                 backQueue.Add(result);
-                endResult();
+                left = result;
             }
             else
             {
@@ -137,51 +196,111 @@ namespace Calculator
 
         private void btnSeven_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "7";
         }
 
         private void btnEight_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "8";
         }
 
         private void btnNine_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "9";
         }
 
         private void btnFour_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "4";
         }
 
         private void btnFive_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "5";
         }
 
         private void btnSix_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "6";
         }
 
         private void btnOne_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "1";
         }
 
         private void btnTwo_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "2";
         }
 
         private void btnThree_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "3";
         }
 
         private void btnZero_Click(object sender, EventArgs e)
         {
+            result = 0m;
+            if (equals)
+            {
+                txtDisplay.Text = "";
+                operation = false;
+            }
             txtDisplay.Text = txtDisplay.Text + "0";
         }
 
@@ -207,7 +326,16 @@ namespace Calculator
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            txtDisplay.Text = backQueue[backQueue.Count-1].ToString();
+            try
+            {
+                txtDisplay.Text = txtDisplay.Text.Substring(0, txtDisplay.Text.Length - 1);
+            }
+            catch(Exception exce)
+            {
+                
+            }
         }
+
+        
     }
 }
